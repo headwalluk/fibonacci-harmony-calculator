@@ -1,0 +1,71 @@
+name: Build Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get version from tag
+        id: get_version
+        run: |
+          # Remove 'v' prefix from tag (v1.0.0 -> 1.0.0)
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "Plugin version: ${VERSION}"
+
+      - name: Prepare plugin directory
+        run: |
+          mkdir -p build
+          rsync -av --exclude-from=.distignore ./ build/fibonacci-harmony-calculator/
+
+      - name: Build release zips
+        # Build the versioned zip once, then copy it to the generic
+        # filename so both artifacts are guaranteed byte-identical
+        # (same SHA256, just different filenames).
+        run: |
+          cd build
+          zip -r fibonacci-harmony-calculator-${{ steps.get_version.outputs.version }}.zip fibonacci-harmony-calculator/
+          cp fibonacci-harmony-calculator-${{ steps.get_version.outputs.version }}.zip fibonacci-harmony-calculator.zip
+          cd ..
+
+      - name: Upload versioned zip as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fibonacci-harmony-calculator-${{ steps.get_version.outputs.version }}
+          path: build/fibonacci-harmony-calculator-${{ steps.get_version.outputs.version }}.zip
+
+      - name: Upload generic zip as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fibonacci-harmony-calculator
+          path: build/fibonacci-harmony-calculator.zip
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            build/fibonacci-harmony-calculator-${{ steps.get_version.outputs.version }}.zip
+            build/fibonacci-harmony-calculator.zip
+          body: |
+            **Fibonacci Harmony Calculator v${{ steps.get_version.outputs.version }}**
+
+            A shortcode, `[fibonacci_harmony]`, that renders an interactive calculator and graphic exploring the Fibonacci 60 Repeating Pattern.
+
+            Download `fibonacci-harmony-calculator.zip` and install via WordPress admin (Plugins → Add New → Upload Plugin), or unzip it into your `wp-content/plugins/` directory.
+
+            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for full release notes.
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

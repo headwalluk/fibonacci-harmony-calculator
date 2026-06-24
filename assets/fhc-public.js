@@ -33,6 +33,9 @@
 
 			this.count = parseInt( container.dataset.fhcCount, 10 ) || 0;
 			this.scale = parseInt( container.dataset.fhcSeedScale, 10 ) || 100;
+			// Decimal places the scale represents (scale is a power of ten), so a
+			// fraction of `seedDecimals` digits is exact. Mirrors SEED_DECIMALS.
+			this.seedDecimals = String( this.scale ).length - 1;
 			this.min = parseFloat( container.dataset.fhcSeedMin );
 			this.max = parseFloat( container.dataset.fhcSeedMax );
 
@@ -108,27 +111,34 @@
 		}
 
 		/**
-		 * Format a value: scaledSeed x classic Fibonacci, divided by scale.
-		 * Identical output to Calculator::format_value() in PHP.
+		 * Format a value: scaledSeed x classic Fibonacci, divided by scale, rounded
+		 * to at most `decimals` places. Identical output to
+		 * Calculator::format_value() in PHP, using BigInt so the rounding carries no
+		 * floating-point noise.
 		 *
 		 * @param {BigInt} classicValue Classic Fibonacci value.
+		 * @param {number} decimals     Maximum decimal places to display.
 		 * @return {string}
 		 */
-		formatValue( classicValue ) {
+		formatValue( classicValue, decimals ) {
 			const scaledSeed = BigInt( Math.round( this.seed * this.scale ) );
-			const scale = BigInt( this.scale );
 			const numerator = classicValue * scaledSeed;
 
-			const integerPart = numerator / scale;
-			const fraction = numerator % scale;
+			// Drop the (seedDecimals - decimals) least-significant digits, rounding
+			// half up. The seed is non-negative, so the numerator is too.
+			const factor = 10n ** BigInt( this.seedDecimals - decimals );
+			const rounded = ( numerator + factor / 2n ) / factor;
+
+			const unit = 10n ** BigInt( decimals );
+			const integerPart = rounded / unit;
+			const fraction = rounded % unit;
 
 			let out = groupThousands( integerPart.toString() );
 
 			if ( fraction > 0n ) {
-				// scale is 100, so the fraction is at most two digits.
 				const fractionString = fraction
 					.toString()
-					.padStart( String( this.scale ).length - 1, '0' )
+					.padStart( decimals, '0' )
 					.replace( /0+$/, '' );
 				out += '.' + fractionString;
 			}
@@ -139,9 +149,10 @@
 		render() {
 			this.valueCells.forEach( ( cell ) => {
 				const index = parseInt( cell.dataset.fhcIndex, 10 );
+				const decimals = parseInt( cell.dataset.fhcDecimals, 10 ) || 0;
 				const classicValue = this.classic[ index ];
 				if ( undefined !== classicValue ) {
-					cell.textContent = this.formatValue( classicValue );
+					cell.textContent = this.formatValue( classicValue, decimals );
 				}
 			} );
 		}

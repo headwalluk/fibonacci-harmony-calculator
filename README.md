@@ -10,7 +10,7 @@ interactive calculator and graphic that explores the **Fibonacci 60 Repeating Pa
 Visitors set a **seed** (a decimal from `0.0` to `2.0`) that scales a Fibonacci sequence
 of N numbers (default 60). The sequence is laid out as a clock face around a circular
 wheel graphic — index 60 at the top, running clockwise — with each entry showing its
-value and its arc angle in both the standard 360° and the "Asian" 432° systems. The
+value and its arc angle in both the standard 360° and the "Ancient" 432° systems. The
 numbers recalculate live as the seed changes.
 
 No build step, no Composer, no external CDNs — drop it in and activate.

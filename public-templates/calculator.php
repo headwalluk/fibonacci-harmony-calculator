@@ -26,22 +26,24 @@ $fhc_parts    = Calculator::partition_indices( $fhc_count );
 
 /**
  * Echo the four table cells for one ordinal. The value cell carries
- * data-fhc-index so the front-end script can update it live.
+ * data-fhc-index and data-fhc-decimals so the front-end script can update it
+ * live at the same precision PHP rendered.
  *
- * @param array $ordinal Ordinal data (index, value, arc_standard, arc_asian).
+ * @param array $ordinal Ordinal data (index, value, decimals, arc_standard, arc_ancient).
  * @return void
  */
 $fhc_render_cells = static function ( array $ordinal ) {
 	printf(
 		'<td class="fhc-cell fhc-cell--index">%1$s</td>' .
-		'<td class="fhc-cell fhc-cell--value" data-fhc-index="%2$d">%3$s</td>' .
-		'<td class="fhc-cell fhc-cell--arc">%4$s&deg;</td>' .
-		'<td class="fhc-cell fhc-cell--arc">%5$s&deg;</td>',
+		'<td class="fhc-cell fhc-cell--value" data-fhc-index="%2$d" data-fhc-decimals="%3$d">%4$s</td>' .
+		'<td class="fhc-cell fhc-cell--arc">%5$s&deg;</td>' .
+		'<td class="fhc-cell fhc-cell--arc">%6$s&deg;</td>',
 		esc_html( $ordinal['index'] ),
 		(int) $ordinal['index'],
+		(int) $ordinal['decimals'],
 		esc_html( $ordinal['value'] ),
 		esc_html( $ordinal['arc_standard'] ),
-		esc_html( $ordinal['arc_asian'] )
+		esc_html( $ordinal['arc_ancient'] )
 	);
 };
 
@@ -64,7 +66,7 @@ $fhc_render_table = static function ( array $indices, array $ordinals, callable 
 				<th scope="col"><?php echo esc_html_x( '#', 'table column: ordinal index', 'fibonacci-harmony-calculator' ); ?></th>
 				<th scope="col"><?php echo esc_html_x( 'Value', 'table column: the Fibonacci number', 'fibonacci-harmony-calculator' ); ?></th>
 				<th scope="col"><?php echo esc_html_x( 'Std', 'table column: standard 360-degree arc angle', 'fibonacci-harmony-calculator' ); ?></th>
-				<th scope="col"><?php echo esc_html_x( 'Asian', 'table column: Asian 432-degree arc angle', 'fibonacci-harmony-calculator' ); ?></th>
+				<th scope="col"><?php echo esc_html_x( 'Ancient', 'table column: Ancient 432-degree arc angle', 'fibonacci-harmony-calculator' ); ?></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -96,9 +98,9 @@ $fhc_render_callout = static function ( array $ordinal, $label ) {
 			printf( esc_html__( '#%s', 'fibonacci-harmony-calculator' ), esc_html( $ordinal['index'] ) );
 			?>
 		</span>
-		<span class="fhc-callout__value" data-fhc-index="<?php echo (int) $ordinal['index']; ?>"><?php echo esc_html( $ordinal['value'] ); ?></span>
+		<span class="fhc-callout__value" data-fhc-index="<?php echo (int) $ordinal['index']; ?>" data-fhc-decimals="<?php echo (int) $ordinal['decimals']; ?>"><?php echo esc_html( $ordinal['value'] ); ?></span>
 		<span class="fhc-callout__arcs">
-			<?php echo esc_html( $ordinal['arc_standard'] ); ?>&deg; / <?php echo esc_html( $ordinal['arc_asian'] ); ?>&deg;
+			<?php echo esc_html( $ordinal['arc_standard'] ); ?>&deg; / <?php echo esc_html( $ordinal['arc_ancient'] ); ?>&deg;
 		</span>
 	</div>
 	<?php
@@ -133,13 +135,13 @@ $fhc_render_callout = static function ( array $ordinal, $label ) {
 			class="fhc-seed fhc-seed--number"
 			min="<?php echo esc_attr( SEED_MIN ); ?>"
 			max="<?php echo esc_attr( SEED_MAX ); ?>"
-			step="<?php echo esc_attr( SEED_STEP ); ?>"
+			step="<?php echo esc_attr( SEED_INPUT_STEP ); ?>"
 			value="<?php echo esc_attr( $fhc_seed ); ?>"
 		/>
 	</div>
 
 	<p class="fhc-mobile-note">
-		<?php esc_html_e( 'This visualisation works best in landscape or on a larger screen.', 'fibonacci-harmony-calculator' ); ?>
+		<?php esc_html_e( 'This visualization works best in landscape or on a larger screen.', 'fibonacci-harmony-calculator' ); ?>
 	</p>
 
 	<div class="fhc-stage">

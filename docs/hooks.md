@@ -133,7 +133,7 @@ use Fibonacci_Harmony_Calculator\Calculator;
 
 $calc     = new Calculator( 0.5, 60 );
 $ordinals = $calc->get_ordinals();
-// $ordinals[7] => array( 'index' => 7, 'value' => '6.5', 'arc_standard' => '42', 'arc_asian' => '50.4' )
+// $ordinals[7] => array( 'index' => 7, 'value' => '6.5', 'decimals' => 6, 'arc_standard' => '42', 'arc_ancient' => '50.4' )
 
 $parts = Calculator::partition_indices( 60 );
 // array( 'north' => 60, 'south' => 30, 'right' => [1..29], 'left' => [59..31] )

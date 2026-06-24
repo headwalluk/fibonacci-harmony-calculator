@@ -45,20 +45,24 @@ The sequence is **1-indexed** in all display (index 1 … N), never 0-indexed.
 ### 2.2 Seed
 
 - Range: `0.0` to `2.0` inclusive.
-- Step: `0.01`.
+- Step: the **range slider** drags in coarse `0.01` increments; the **number field**
+  accepts a fully-precise decimal down to `0.000001` (6 places) so a client can type
+  an exact seed such as `1.234567`.
 - Default: `1.0`.
 - Always validated and clamped to range on both the PHP and JS sides; never trusted.
 
 ### 2.3 Precision strategy (avoid float artifacts)
 
-Because the seed has at most 2 decimal places (`step = 0.01`), every value is exactly
-`classic_Fib(n) × k / 100`, where `k` is an integer 0–200 (`k = round(s × 100)`).
+Because the seed has at most 6 decimal places (`SEED_DECIMALS = 6`), every value is
+exactly `classic_Fib(n) × k / 1,000,000`, where `k` is an integer 0–2,000,000
+(`k = round(s × 1,000,000)`, i.e. `s × SEED_SCALE`).
 
 To keep results exact and free of floating-point noise:
 
 - Compute **classic Fibonacci as integers** (PHP native `int`; JS `BigInt`).
-- Multiply the integer Fibonacci by `k`, then present the value as
-  `(integer_part) . (two-decimal fraction)` derived from dividing by 100.
+- Multiply the integer Fibonacci by `k` to get the value's numerator (in units of
+  `1/SEED_SCALE`), then round that numerator to the row's decimal precision (§2.4)
+  using **integer maths only** — drop the surplus low-order digits, rounding half up.
 - Formatting then operates on that exact integer/fraction split.
 
 **Practical range note:** PHP 64-bit `int` holds classic Fibonacci up to ≈ F(92); JS
@@ -73,8 +77,16 @@ already covers it on the JS side; document any PHP-side limit if `count` is push
 - Show decimals **only when the fractional part is non-zero**; trim trailing zeros
   (`4181.50` → `4,181.5`, `2584.00` → `2,584`).
 - Whole numbers show no decimal point.
+- **Per-region precision.** Rows in the first quarter of the sequence
+  (`index ≤ count / PRECISE_ROWS_FRACTION`, i.e. the top of the right-hand table —
+  `1 … 15` at `N = 60`) display up to **`VALUE_DECIMALS_MAX = 6`** decimal places so a
+  finely-tuned decimal seed stays visible while the values are still small. Every
+  other row (and both call-outs) caps at **`VALUE_DECIMALS_DEFAULT = 2`**, rounded
+  half up. Trailing zeros are still trimmed, so the rule only adds digits when the
+  seed actually carries that precision.
 
 Examples (seed `0.5`): `0.5, 0.5, 1, 1.5, 2.5, 4, … 4,181.5, … 1,548,008,755,920`.
+Example (seed `1.234567`, index 5 — a 6-dp row): `5 × 1.234567 = 6.172835`.
 
 ---
 
@@ -87,7 +99,7 @@ Each row of the number columns shows **four** fields:
 | **Index** | 1-based ordinal (1 … N) |
 | **Value** | `F(index)`, smart-formatted (§2.4) |
 | **Standard arc** | Cumulative angle = `index × (360 / N)` degrees |
-| **Asian arc** | Cumulative angle = `index × (432 / N)` degrees |
+| **Ancient arc** | Cumulative angle = `index × (432 / N)` degrees |
 
 ### 3.1 Arc lengths are cumulative (position around the wheel)
 
@@ -95,10 +107,10 @@ The arc value on each row is the **angular position** of that ordinal around the
 circle, not a constant per-step value. At `N = 60`:
 
 - Standard step = `360 / 60 = 6°` → row 1 = 6°, row 2 = 12°, … row 60 = 360°.
-- Asian step = `432 / 60 = 7.2°` → row 1 = 7.2°, row 2 = 14.4°, … row 60 = 432°.
+- Ancient step = `432 / 60 = 7.2°` → row 1 = 7.2°, row 2 = 14.4°, … row 60 = 432°.
 
 The two number systems differ only in their **full-circle measure**: `360°` (standard)
-vs `432°` (Asian). The Fibonacci values themselves are identical in both. The full-circle
+vs `432°` (Ancient). The Fibonacci values themselves are identical in both. The full-circle
 degrees are named constants (`360` / `432`); the per-step and per-row angles are derived
 from `count`, so there are **no magic numbers**.
 
@@ -132,7 +144,7 @@ Read in wheel-clockwise order, the values flow continuously:
 that following it upward matches the clockwise travel up the left side of the wheel.
 
 Each table row still carries all four fields from §3 (index, value, standard arc°,
-Asian arc°). The call-outs likewise show their index, value and both arc angles, just
+Ancient arc°). The call-outs likewise show their index, value and both arc angles, just
 styled as a prominent single box rather than a table row.
 
 **Even `count` assumed.** The clock layout is defined for even `N` (the natural case,

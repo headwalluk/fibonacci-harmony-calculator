@@ -16,11 +16,12 @@ defined( 'ABSPATH' ) || die();
  * unit-testable and mirrors the front-end JavaScript exactly. The sequence is
  * F(1) = F(2) = seed, F(n) = F(n-1) + F(n-2), i.e. seed x classic Fibonacci.
  *
- * Precision: the seed resolves to the nearest 1/SEED_SCALE, so each value is the
- * integer (classic Fibonacci x scaled-seed) divided by SEED_SCALE. Working in
- * integers avoids floating-point artifacts. PHP's native 64-bit int holds the
- * scaled product up to roughly count = 80; beyond that the front-end BigInt path
- * is authoritative for the live view.
+ * Precision: the seed resolves to the nearest 1/SEED_SCALE (SEED_DECIMALS places),
+ * so each value is the integer (classic Fibonacci x scaled-seed) divided by
+ * SEED_SCALE. Working in integers avoids floating-point artifacts. With the larger
+ * SEED_SCALE this product fits PHP's native 64-bit int up to roughly count = 62;
+ * beyond that the front-end BigInt path is authoritative for the live view, and PHP
+ * only renders the initial (default-seed) first paint anyway.
  */
 class Calculator {
 
@@ -79,28 +80,47 @@ class Calculator {
 	 * Build the full list of ordinals.
 	 *
 	 * @return array<int, array<string, int|string>> Keyed by 1-based index, each
-	 *                                                with index, value, arc_standard, arc_asian.
+	 *                                                with index, value, decimals,
+	 *                                                arc_standard, arc_ancient.
 	 */
 	public function get_ordinals() {
-		$classic    = self::classic_fibonacci( $this->count );
-		$std_step   = CIRCLE_DEGREES_STANDARD / $this->count;
-		$asian_step = CIRCLE_DEGREES_ASIAN / $this->count;
+		$classic      = self::classic_fibonacci( $this->count );
+		$std_step     = CIRCLE_DEGREES_STANDARD / $this->count;
+		$ancient_step = CIRCLE_DEGREES_ANCIENT / $this->count;
 
 		// Number of azimuth divisions around the circle (cardinals x thirds).
 		$divisions = COMPASS_POINT_COUNT * QUADRANT_SUBDIVISIONS;
 
 		$ordinals = array();
 		foreach ( $classic as $index => $classic_value ) {
+			$decimals           = self::value_decimals( $index, $this->count );
 			$ordinals[ $index ] = array(
 				'index'        => $index,
-				'value'        => $this->format_value( $classic_value * $this->scaled_seed ),
+				'value'        => $this->format_value( $classic_value * $this->scaled_seed, $decimals ),
+				'decimals'     => $decimals,
 				'arc_standard' => self::format_degrees( $index * $std_step ),
-				'arc_asian'    => self::format_degrees( $index * $asian_step ),
+				'arc_ancient'  => self::format_degrees( $index * $ancient_step ),
 				'azimuth'      => $this->azimuth( $index, $divisions ),
 			);
 		}
 
 		return $ordinals;
+	}
+
+	/**
+	 * Number of decimal places to display for a row's value.
+	 *
+	 * Rows in the first 1/PRECISE_ROWS_FRACTION of the sequence (the top quarter,
+	 * i.e. the top of the right-hand table) show up to VALUE_DECIMALS_MAX places so
+	 * a finely-tuned decimal seed is visible; every other row caps at
+	 * VALUE_DECIMALS_DEFAULT. Trailing zeros are trimmed downstream either way.
+	 *
+	 * @param int $index 1-based ordinal index.
+	 * @param int $count Number of ordinals.
+	 * @return int Maximum decimal places for this row.
+	 */
+	public static function value_decimals( $index, $count ) {
+		return ( PRECISE_ROWS_FRACTION * $index <= $count ) ? VALUE_DECIMALS_MAX : VALUE_DECIMALS_DEFAULT;
 	}
 
 	/**
@@ -168,6 +188,20 @@ class Calculator {
 	}
 
 	/**
+	 * Clamp an ordinal count to the allowed range.
+	 *
+	 * Guards the input boundary so an out-of-range `count` attribute can't render a
+	 * runaway DOM. The lower bound keeps at least one ordinal; the upper bound caps
+	 * the row count.
+	 *
+	 * @param int $count Raw count.
+	 * @return int
+	 */
+	public static function clamp_count( $count ) {
+		return min( COUNT_MAX, max( COUNT_MIN, (int) $count ) );
+	}
+
+	/**
 	 * Generate the classic Fibonacci sequence (1, 1, 2, 3, ...) as integers.
 	 *
 	 * @param int $count Number of terms.
@@ -189,22 +223,29 @@ class Calculator {
 	/**
 	 * Format a scaled value (numerator / SEED_SCALE) for display.
 	 *
-	 * Adds thousands separators to the integer part and shows decimals only when
-	 * non-zero, with trailing zeros trimmed (4181.50 -> "4,181.5", 2584.00 ->
-	 * "2,584").
+	 * Rounds to at most $decimals places, adds thousands separators to the integer
+	 * part, and shows decimals only when non-zero with trailing zeros trimmed
+	 * (e.g. 4181.50 -> "4,181.5", 2584.00 -> "2,584"). The rounding is done in
+	 * integers so there is no floating-point noise.
 	 *
 	 * @param int $numerator Value multiplied by SEED_SCALE.
+	 * @param int $decimals  Maximum decimal places to display (0..SEED_DECIMALS).
 	 * @return string
 	 */
-	private function format_value( $numerator ) {
-		$integer_part = intdiv( $numerator, SEED_SCALE );
-		$fraction     = abs( $numerator % SEED_SCALE );
+	private function format_value( $numerator, $decimals ) {
+		// Drop the (SEED_DECIMALS - $decimals) least-significant digits, rounding
+		// half up. The seed is non-negative, so the numerator is too.
+		$factor  = 10 ** ( SEED_DECIMALS - $decimals );
+		$rounded = intdiv( $numerator + intdiv( $factor, 2 ), $factor );
+
+		$unit         = 10 ** $decimals;
+		$integer_part = intdiv( $rounded, $unit );
+		$fraction     = $rounded % $unit;
 
 		$formatted = number_format( $integer_part );
 
 		if ( $fraction > 0 ) {
-			// SEED_SCALE is 100, so the fraction is at most two digits.
-			$fraction_string = rtrim( sprintf( '%02d', $fraction ), '0' );
+			$fraction_string = rtrim( sprintf( '%0' . $decimals . 'd', $fraction ), '0' );
 			$formatted      .= '.' . $fraction_string;
 		}
 

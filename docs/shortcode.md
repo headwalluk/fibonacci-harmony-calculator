@@ -19,8 +19,8 @@ then drag the slider or type a seed to recalculate.
 
 | Attribute | Default | Description |
 |-----------|---------|-------------|
-| `seed` | `1.0` | The starting value, a decimal from `0.0` to `2.0`. Sets where the calculator opens; visitors can still change it live. Values outside the range are clamped; the seed resolves to the nearest `0.01`. |
-| `count` | `60` | How many numbers to generate. Drives the rows, the layout split, and the arc-angle steps. |
+| `seed` | `1.0` | The starting value, a decimal from `0.0` to `2.0`. Sets where the calculator opens; visitors can still change it live. Values outside the range are clamped. The slider steps by `0.01`; the number field accepts a precise decimal (up to 6 places). |
+| `count` | `60` | How many numbers to generate. Drives the rows, the layout split, and the arc-angle steps. Clamped to `1`–`360`. |
 | `image` | *(bundled wheel)* | URL of an alternative wheel graphic. Use this if you need a wheel drawn for a different `count` (see note below). |
 
 ### Examples
@@ -45,7 +45,7 @@ For a seed `s`, the sequence is `s × the classic Fibonacci sequence`:
 Each entry also shows two **arc angles** — its position around the circle:
 
 - **Std** — the standard system, where a full circle is `360°` (so 60 points step by `6°`).
-- **Asian** — a system where a full circle is `432°` (so 60 points step by `7.2°`).
+- **Ancient** — a system where a full circle is `432°` (so 60 points step by `7.2°`).
 
 The Fibonacci values are identical in both systems; only the circle's total degrees differ.
 

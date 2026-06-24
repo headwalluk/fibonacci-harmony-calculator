@@ -72,7 +72,7 @@ class Shortcode {
 		$atts = shortcode_atts( $defaults, $atts, SHORTCODE_TAG );
 
 		$seed  = Calculator::clamp_seed( $atts[ ATT_SEED ] );
-		$count = max( 1, (int) $atts[ ATT_COUNT ] );
+		$count = Calculator::clamp_count( $atts[ ATT_COUNT ] );
 
 		$image = '' !== trim( (string) $atts[ ATT_IMAGE ] )
 			? $atts[ ATT_IMAGE ]

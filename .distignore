@@ -1,0 +1,35 @@
+# Files and directories that must NOT ship in the distributed plugin zip.
+# Consumed by .github/workflows/release.yml (rsync --exclude-from). Patterns with a
+# leading slash are anchored to the plugin root.
+
+# Version control & CI
+/.git
+/.github
+/.gitignore
+/.distignore
+
+# Dev tooling & coding standards
+/phpcs.xml
+/CLAUDE.md
+
+# Developer documentation & project notes (not needed at runtime)
+/dev-notes
+/docs
+/README.md
+
+# Build output & archives
+/build
+/dist
+*.zip
+*.tar.gz
+
+# Dependencies (none currently, but guard anyway)
+/vendor
+/node_modules
+
+# OS & editor cruft
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.bak

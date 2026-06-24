@@ -1,0 +1,90 @@
+# Copyright (C) 2026 Paul Faulkner
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Language: en_GB\n"
+"Project-Id-Version: Fibonacci Harmony Calculator 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/fibonacci-harmony-calculator\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-06-24T13:30:10+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: fibonacci-harmony-calculator\n"
+
+#. Plugin Name of the plugin
+#: fibonacci-harmony-calculator.php
+msgid "Fibonacci Harmony Calculator"
+msgstr "Fibonacci Harmony Calculator"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: fibonacci-harmony-calculator.php
+msgid "https://headwall-hosting.com/"
+msgstr "https://headwall-hosting.com/"
+
+#. Description of the plugin
+#: fibonacci-harmony-calculator.php
+msgid "Shortcode that renders an interactive calculator and graphic exploring the Fibonacci 60 Repeating Pattern."
+msgstr "Shortcode that renders an interactive calculator and graphic exploring the Fibonacci 60 Repeating Pattern."
+
+#. Author of the plugin
+#: fibonacci-harmony-calculator.php
+msgid "Paul Faulkner"
+msgstr "Paul Faulkner"
+
+#: public-templates/calculator.php:66
+msgctxt "table column: ordinal index"
+msgid "#"
+msgstr "#"
+
+#: public-templates/calculator.php:67
+msgctxt "table column: the Fibonacci number"
+msgid "Value"
+msgstr "Value"
+
+#: public-templates/calculator.php:68
+msgctxt "table column: standard 360-degree arc angle"
+msgid "Std"
+msgstr "Std"
+
+#: public-templates/calculator.php:69
+msgctxt "table column: Ancient 432-degree arc angle"
+msgid "Ancient"
+msgstr "Ancient"
+
+#. translators: %s: ordinal index.
+#: public-templates/calculator.php:98
+#, php-format
+msgid "#%s"
+msgstr "#%s"
+
+#: public-templates/calculator.php:121
+msgctxt "calculator input: starting value for the sequence"
+msgid "Seed"
+msgstr "Seed"
+
+#: public-templates/calculator.php:130
+msgid "Seed value slider"
+msgstr "Seed value slider"
+
+#: public-templates/calculator.php:144
+msgid "This visualization works best in landscape or on a larger screen."
+msgstr "This visualisation works best in landscape or on a larger screen."
+
+#: public-templates/calculator.php:154
+msgctxt "position on the wheel: top / 12 o'clock"
+msgid "North"
+msgstr "North"
+
+#: public-templates/calculator.php:156
+msgid "Fibonacci 60 pattern wheel"
+msgstr "Fibonacci 60 pattern wheel"
+
+#: public-templates/calculator.php:158
+msgctxt "position on the wheel: bottom / 6 o'clock"
+msgid "South"
+msgstr "South"

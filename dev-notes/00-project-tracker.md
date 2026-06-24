@@ -1,9 +1,9 @@
 # Project Tracker
 
-**Version:** 0.2.0
+**Version:** 1.0.0
 **Last Updated:** 2026-06-24
-**Current Phase:** Phase 3 — polish / wash-up adjustments
-**Overall Progress:** ~85% (interactive front-end + colouring shipped; final tweaks pending)
+**Current Phase:** 1.0.0 — released
+**Overall Progress:** 100% for v1.0.0 (decimal-seed precision, "Ancient" rename, `count` clamp, translations, readme.txt)
 
 ---
 
@@ -16,7 +16,7 @@ exploring the Fibonacci 60 Repeating Pattern.
 A user-set **seed** (decimal 0.0–2.0, default 1.0) drives a Fibonacci-style sequence of
 N numbers (default 60), where `F(1)=F(2)=seed` and `F(n)=F(n-1)+F(n-2)` — i.e.
 `seed × classic Fibonacci`. The sequence is shown as two columns of rows (index, value,
-standard arc °, Asian arc °) flanking a static circular wheel graphic. The calculation
+standard arc °, Ancient arc °) flanking a static circular wheel graphic. The calculation
 runs live, client-side.
 
 Full behavioural spec: [`01-requirements.md`](01-requirements.md).
@@ -94,7 +94,7 @@ fibonacci-harmony-calculator/
 - [x] Strings aligned with wp-translate conventions (`_x()` contexts)
 - [x] LICENSE (GPLv2), README.md, docs/shortcode.md, docs/hooks.md
 - [x] `git init` + initial commit + push to remote
-- [ ] readme.txt, CHANGELOG.md (deferred)
+- [x] readme.txt, CHANGELOG.md
 
 ### Phase 2 — Core build ✅
 - [x] `fhc-public.css` — desktop clock/cross grid (CSS grid areas), seed controls,
@@ -129,6 +129,16 @@ graphic does not match the point count (documented caveat). Either set the demo 
 ## Technical Debt
 
 _None yet._
+
+---
+
+## Future enhancements (backlog)
+
+- **Accessibility: table captions / labelling.** The two number tables render without
+  a `<caption>`, so screen-reader users meet two unlabelled tables. Add visually-hidden
+  captions (e.g. "Indices 1–29, top of the wheel clockwise" / "Indices 31–59, bottom of
+  the wheel clockwise") and consider an `aria-live="polite"` region so live seed changes
+  are announced. Deferred from 1.0.0 (not required for release).
 
 ---
 

@@ -86,14 +86,14 @@ around the wheel as a clock face (see `dev-notes/01-requirements.md` §4 for the
 - **Mobile:** same clock layout, scaled down to fit, plus an advisory note recommending
   landscape / a larger screen (requirements §4.4).
 - Each row / call-out shows: index (1-based), the Fibonacci value, the standard arc
-  angle, and the "Asian" (432°-circle) arc angle.
+  angle, and the "Ancient" (432°-circle) arc angle.
 
 ### Constants
 
 All magic strings, attribute names, and defaults live in `constants.php` under the
 `Fibonacci_Harmony_Calculator` namespace. **No magic numbers in code** — the sequence
 length (default `60`), the seed range (`0.0`–`2.0`), the full-circle degrees
-(`360` standard / `432` Asian), and the shortcode tag are all named constants.
+(`360` standard / `432` Ancient), and the shortcode tag are all named constants.
 Convention: `DEF_` for defaults, `ATT_` for shortcode attribute keys.
 
 ## Key Conventions
