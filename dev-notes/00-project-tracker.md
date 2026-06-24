@@ -1,9 +1,9 @@
 # Project Tracker
 
-**Version:** 0.1.0 (pre-release)
+**Version:** 0.2.0
 **Last Updated:** 2026-06-24
-**Current Phase:** Phase 0 — Requirements (complete) → Phase 1 (scaffold)
-**Overall Progress:** ~10% (requirements locked, no code yet)
+**Current Phase:** Phase 3 — polish / wash-up adjustments
+**Overall Progress:** ~85% (interactive front-end + colouring shipped; final tweaks pending)
 
 ---
 
@@ -96,10 +96,26 @@ fibonacci-harmony-calculator/
 - [x] `git init` + initial commit + push to remote
 - [ ] readme.txt, CHANGELOG.md (deferred)
 
-### Phase 2 — Core build
-- [ ] `fhc-public.css` — desktop clock/cross grid, seed controls, scaled-down mobile + note
-- [ ] `fhc-public.js` — JS Calculator mirror (BigInt), slider/number sync, live value updates
-- [ ] (Calculator + template scaffolded in Phase 1; flesh out CSS/JS to bring it alive)
+### Phase 2 — Core build ✅
+- [x] `fhc-public.css` — desktop clock/cross grid (CSS grid areas), seed controls,
+      container-query scale-down + advisory note on narrow widget widths
+- [x] `fhc-public.js` — Calculator mirror (BigInt), slider/number sync, live value updates
+- [x] `data-fhc-seed-scale` exposed so JS reads SEED_SCALE (no hardcoded /100)
+- [x] PHP/JS output parity verified (node + php harness, identical results)
+- [x] Assets confirmed served on the live demo CDN path
+- [x] Compass colouring — `fhc-azimuth-{deg}` row classes, CSS maps cardinals→green
+      (N/E/S/W) and quadrant-thirds→red; only colours exact-ordinal angles
+      (requirements §4.5)
+
+**Demo note:** the showcase post uses `count=72`, so the bundled 60-point wheel
+graphic does not match the point count (documented caveat). Either set the demo to
+`count=60` or supply a 72-point wheel via the `image` attribute.
+
+### Phase 3 — Polish & verify
+- [ ] Visual check on the live demo (desktop clock layout + mobile scale/note)
+- [ ] Multiple-instances-per-page check
+- [ ] Edge cases: seed 0.0 / 2.0, odd `count`, large `count`
+- [ ] Swap in client's real wheel graphic when supplied
 
 ### Phase 3 — Polish & verify
 - [ ] Multiple-instances-per-page check

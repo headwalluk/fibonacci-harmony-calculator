@@ -101,6 +101,28 @@ wp-content/themes/your-theme/fibonacci_harmony/calculator.php
 The template receives `$calculator` (a `Calculator` instance), `$instance_id` (a unique
 container id), and `$image_url` (the escaped wheel URL).
 
+## Customising the styling
+
+The front-end CSS exposes custom properties on `.fhc-calculator` that you can override
+from your theme (no need to dequeue the plugin stylesheet):
+
+| Property | Default | Purpose |
+|----------|---------|---------|
+| `--fhc-compass-green` | `#1a7f37` | Colour for cardinal points (N/E/S/W). |
+| `--fhc-compass-red` | `#d63638` | Colour for quadrant-third rows. |
+| `--fhc-max-wheel` | `420px` | Maximum width of the wheel graphic. |
+
+```css
+.fhc-calculator {
+	--fhc-compass-green: #0b6b2e;
+	--fhc-compass-red: #a30e0e;
+	--fhc-max-wheel: 360px;
+}
+```
+
+The compass colouring is applied by `fhc-azimuth-{deg}` classes on the relevant rows
+(e.g. `fhc-azimuth-90` for East). Target those classes directly for finer control.
+
 ## Programmatic access to the maths
 
 The `Fibonacci_Harmony_Calculator\Calculator` class is free of WordPress dependencies and

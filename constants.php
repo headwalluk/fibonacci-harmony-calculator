@@ -65,6 +65,14 @@ const CIRCLE_DEGREES_ASIAN    = 432;
 // Decimal places used when displaying arc angles (trailing zeros trimmed).
 const ARC_DECIMALS = 2;
 
+// Compass overlay. The wheel is divided into COMPASS_POINT_COUNT cardinal points
+// (N/E/S/W) and each quadrant is split into QUADRANT_SUBDIVISIONS thirds. A row
+// whose standard angle lands exactly on one of these divisions gets an
+// `fhc-azimuth-{deg}` class so the front-end can colour it (cardinals green,
+// subdivisions red). Rows that don't land on a division get no class.
+const COMPASS_POINT_COUNT   = 4;
+const QUADRANT_SUBDIVISIONS = 3;
+
 // ============================================================================
 // Layout
 // ============================================================================

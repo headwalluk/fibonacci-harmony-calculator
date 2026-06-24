@@ -63,6 +63,19 @@ Read clockwise, the values flow continuously around the circle.
 On phones and narrow screens the same layout is shown but scaled down, with a note
 suggesting landscape or a larger screen for the best view.
 
+## Colour coding
+
+Entries are coloured by their position around the wheel:
+
+- **Green** marks the compass points — North and South (the call-outs), plus East and
+  West when an exact number lands on them (this happens when `count` is a multiple of 4,
+  e.g. the default 60).
+- **Red** marks the quadrant thirds (every 30° around the circle), where an exact number
+  lands on the division.
+
+If your `count` doesn't place a number exactly on one of these angles, that entry simply
+isn't coloured. Colours can be restyled — see [hooks.md](hooks.md#customising-the-styling).
+
 ## A note on `count` and the wheel image
 
 The bundled wheel graphic is drawn for **60 points**. If you change `count` to something

@@ -33,9 +33,9 @@ Full attribute reference and examples: **[docs/shortcode.md](docs/shortcode.md)*
 - **[docs/hooks.md](docs/hooks.md)** — action hooks and filters for developers extending
   or theming the plugin.
 
-Project history and active milestones live in
-[dev-notes/00-project-tracker.md](dev-notes/00-project-tracker.md); the full functional
-spec is in [dev-notes/01-requirements.md](dev-notes/01-requirements.md).
+Per-version release notes: [CHANGELOG.md](CHANGELOG.md). Project history and active
+milestones live in [dev-notes/00-project-tracker.md](dev-notes/00-project-tracker.md);
+the full functional spec is in [dev-notes/01-requirements.md](dev-notes/01-requirements.md).
 
 ## License
 

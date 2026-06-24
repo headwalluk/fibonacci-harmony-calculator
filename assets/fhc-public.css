@@ -1,7 +1,255 @@
 /**
  * Fibonacci Harmony Calculator - front-end styles.
  *
- * STUB: populated in Phase 2 (core build). Will implement the desktop clock/cross
- * grid (north / left / centre / right / south), the seed controls, and the
- * scaled-down mobile layout with the advisory note.
+ * Desktop: a 3x3 clock/cross grid - North call-out above the wheel, South below,
+ * the left and right number tables flanking it. Small widths (driven by a
+ * container query, so it responds to the widget's own width, not just the
+ * viewport) keep the same layout scaled down and reveal an advisory note.
+ *
+ * Colours intentionally inherit from the theme (currentColor / transparent) so
+ * the widget blends into whatever page it sits on.
  */
+
+.fhc-calculator {
+  /* The widget queries its own width - see the @container rule below. The
+	   768px threshold mirrors MOBILE_BREAKPOINT_PX in constants.php. */
+  container-type: inline-size;
+  container-name: fhc;
+
+  --fhc-max-wheel: 420px;
+
+  /* Compass colours - override from a theme to restyle. */
+  --fhc-compass-green: #1a7f37;
+  --fhc-compass-red: #d63638;
+
+  box-sizing: border-box;
+  width: 100%;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.fhc-calculator *,
+.fhc-calculator *::before,
+.fhc-calculator *::after {
+  box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------------------------
+   Seed controls
+   --------------------------------------------------------------------------- */
+
+.fhc-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.fhc-controls__label {
+  font-weight: 600;
+}
+
+.fhc-seed--range {
+  width: min(320px, 60%);
+}
+
+.fhc-seed--number {
+  width: 5.5rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Advisory note (hidden until the widget is narrow - see @container)
+   --------------------------------------------------------------------------- */
+
+.fhc-mobile-note {
+  display: none;
+  margin: 0 0 0.75rem;
+  font-style: italic;
+  text-align: center;
+  opacity: 0.75;
+}
+
+/* ---------------------------------------------------------------------------
+   Clock / cross layout
+   --------------------------------------------------------------------------- */
+
+.fhc-stage {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  grid-template-areas: 'left centre right';
+  align-items: center;
+  justify-items: center;
+  gap: 0.75rem 1rem;
+  align-items: stretch;
+}
+
+.fhc-region--left {
+  grid-area: left;
+  justify-self: end;
+}
+
+/* North call-out, wheel, and South call-out stack tightly in the centre column
+   so they hug the wheel; the tall side tables centre against this stack. */
+.fhc-region--centre {
+  grid-area: centre;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: var(--fhc-max-wheel);
+  justify-content: space-around;
+}
+
+.fhc-region--right {
+  grid-area: right;
+  justify-self: start;
+}
+
+.fhc-wheel {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ---------------------------------------------------------------------------
+   Number tables
+   --------------------------------------------------------------------------- */
+
+.fhc-table {
+  width: auto;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.fhc-table th,
+.fhc-table td {
+  padding: 0.15rem 0.5rem;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.fhc-table th {
+  font-weight: 600;
+  border-bottom: 1px solid;
+  opacity: 0.7;
+}
+
+.fhc-cell--index {
+  opacity: 0.55;
+}
+
+.fhc-cell--value {
+  font-weight: 600;
+}
+
+.fhc-cell--arc {
+  font-size: 0.85em;
+  opacity: 0.7;
+}
+
+/* ---------------------------------------------------------------------------
+   North / South call-outs
+   --------------------------------------------------------------------------- */
+
+.fhc-callout {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 7rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.fhc-callout__label {
+  font-size: 0.7em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.fhc-callout__index {
+  font-size: 0.8em;
+  opacity: 0.6;
+}
+
+.fhc-callout__value {
+  font-size: 1.35em;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.fhc-callout__arcs {
+  font-size: 0.75em;
+  opacity: 0.7;
+}
+
+/* ---------------------------------------------------------------------------
+   Compass colouring (by standard-angle azimuth)
+
+   North and South are the call-outs - they are the compass N/S figures by
+   construction, so they are always green. East/West and the quadrant-third
+   markers are table rows tagged with an `fhc-azimuth-{deg}` class only when an
+   exact ordinal lands on that angle; cardinals (90/180/270/360) are green and
+   the third divisions (30/60/120/150/210/240/300/330) are red.
+   --------------------------------------------------------------------------- */
+
+.fhc-callout {
+  color: var(--fhc-compass-green);
+}
+
+.fhc-azimuth-90,
+.fhc-azimuth-180,
+.fhc-azimuth-270,
+.fhc-azimuth-360 {
+  color: var(--fhc-compass-green);
+}
+
+.fhc-azimuth-30,
+.fhc-azimuth-60,
+.fhc-azimuth-120,
+.fhc-azimuth-150,
+.fhc-azimuth-210,
+.fhc-azimuth-240,
+.fhc-azimuth-300,
+.fhc-azimuth-330 {
+  color: var(--fhc-compass-red);
+}
+
+/* ---------------------------------------------------------------------------
+   Small widget width: keep the layout, scale it down, reveal the note
+   --------------------------------------------------------------------------- */
+
+@container fhc (max-width: 768px) {
+  .fhc-calculator {
+    font-size: 0.68rem;
+  }
+
+  .fhc-mobile-note {
+    display: block;
+  }
+
+  .fhc-stage {
+    gap: 0.25rem 0.4rem;
+  }
+
+  .fhc-region--centre {
+    max-width: 180px;
+  }
+
+  .fhc-table th,
+  .fhc-table td {
+    padding: 0.05rem 0.2rem;
+  }
+
+  .fhc-callout {
+    min-width: 0;
+    padding: 0.3rem 0.5rem;
+  }
+}

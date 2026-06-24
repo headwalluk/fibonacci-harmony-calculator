@@ -70,7 +70,8 @@ $fhc_render_table = static function ( array $indices, array $ordinals, callable 
 		<tbody>
 			<?php foreach ( $indices as $fhc_index ) : ?>
 				<?php if ( isset( $ordinals[ $fhc_index ] ) ) : ?>
-					<tr><?php $cells_cb( $ordinals[ $fhc_index ] ); ?></tr>
+					<?php $fhc_azimuth = $ordinals[ $fhc_index ]['azimuth']; ?>
+					<tr<?php echo null !== $fhc_azimuth ? ' class="' . esc_attr( 'fhc-azimuth-' . (int) $fhc_azimuth ) . '"' : ''; ?>><?php $cells_cb( $ordinals[ $fhc_index ] ); ?></tr>
 				<?php endif; ?>
 			<?php endforeach; ?>
 		</tbody>
@@ -111,6 +112,7 @@ $fhc_render_callout = static function ( array $ordinal, $label ) {
 	data-fhc-seed-min="<?php echo esc_attr( SEED_MIN ); ?>"
 	data-fhc-seed-max="<?php echo esc_attr( SEED_MAX ); ?>"
 	data-fhc-seed-step="<?php echo esc_attr( SEED_STEP ); ?>"
+	data-fhc-seed-scale="<?php echo esc_attr( SEED_SCALE ); ?>"
 >
 	<div class="fhc-controls">
 		<label class="fhc-controls__label" for="<?php echo esc_attr( $instance_id ); ?>-seed">
@@ -141,24 +143,22 @@ $fhc_render_callout = static function ( array $ordinal, $label ) {
 	</p>
 
 	<div class="fhc-stage">
-		<div class="fhc-region fhc-region--north">
-			<?php $fhc_render_callout( $fhc_ordinals[ $fhc_parts['north'] ], esc_html_x( 'North', 'position on the wheel: top / 12 o\'clock', 'fibonacci-harmony-calculator' ) ); ?>
-		</div>
-
 		<div class="fhc-region fhc-region--left">
 			<?php $fhc_render_table( $fhc_parts['left'], $fhc_ordinals, $fhc_render_cells ); ?>
 		</div>
 
 		<div class="fhc-region fhc-region--centre">
+			<div class="fhc-region--north">
+				<?php $fhc_render_callout( $fhc_ordinals[ $fhc_parts['north'] ], esc_html_x( 'North', 'position on the wheel: top / 12 o\'clock', 'fibonacci-harmony-calculator' ) ); ?>
+			</div>
 			<img class="fhc-wheel" src="<?php echo esc_url( $image_url ); ?>" alt="<?php esc_attr_e( 'Fibonacci 60 pattern wheel', 'fibonacci-harmony-calculator' ); ?>" />
+			<div class="fhc-region--south">
+				<?php $fhc_render_callout( $fhc_ordinals[ $fhc_parts['south'] ], esc_html_x( 'South', 'position on the wheel: bottom / 6 o\'clock', 'fibonacci-harmony-calculator' ) ); ?>
+			</div>
 		</div>
 
 		<div class="fhc-region fhc-region--right">
 			<?php $fhc_render_table( $fhc_parts['right'], $fhc_ordinals, $fhc_render_cells ); ?>
-		</div>
-
-		<div class="fhc-region fhc-region--south">
-			<?php $fhc_render_callout( $fhc_ordinals[ $fhc_parts['south'] ], esc_html_x( 'South', 'position on the wheel: bottom / 6 o\'clock', 'fibonacci-harmony-calculator' ) ); ?>
 		</div>
 	</div>
 </div>

@@ -147,6 +147,26 @@ ordering rules. Recommend even counts in usage docs.
 - Breakpoint is a single named value (default `768px`), defined once (CSS custom
   property / constant), not scattered.
 
+### 4.5 Compass colouring
+
+Rows and call-outs are colour-coded by their **standard** angle (the wheel's
+physical position), independent of the seed:
+
+- **Green = cardinal points** (N/E/S/W, i.e. 90° multiples). North and South are the
+  call-outs and are always green by construction. East/West are table rows and are
+  green **only when an exact ordinal lands on 90° / 270°** — i.e. when `count` is
+  divisible by 4. Otherwise no left/right row is greened.
+- **Red = quadrant-third divisions.** Each 90° quadrant is split into thirds (every
+  30°): rows at 30/60/120/150/210/240/300/330 are red, when an exact ordinal lands
+  there.
+
+Implementation is CSS-driven: the `Calculator` tags each qualifying row with its angle
+(`azimuth`), the template emits `class="fhc-azimuth-{deg}"`, and the stylesheet maps
+those classes to green/red (via the `--fhc-compass-green` / `--fhc-compass-red` custom
+properties). Rows that don't fall on a division get no class and no colour. The number
+of cardinals and quadrant subdivisions are named constants (`COMPASS_POINT_COUNT`,
+`QUADRANT_SUBDIVISIONS`), so there are no magic numbers.
+
 ### 4.4 Mobile strategy
 
 The clock/cross layout is **preserved** on mobile rather than re-flowed — the spatial

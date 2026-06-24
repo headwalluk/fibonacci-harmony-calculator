@@ -86,6 +86,9 @@ class Calculator {
 		$std_step   = CIRCLE_DEGREES_STANDARD / $this->count;
 		$asian_step = CIRCLE_DEGREES_ASIAN / $this->count;
 
+		// Number of azimuth divisions around the circle (cardinals x thirds).
+		$divisions = COMPASS_POINT_COUNT * QUADRANT_SUBDIVISIONS;
+
 		$ordinals = array();
 		foreach ( $classic as $index => $classic_value ) {
 			$ordinals[ $index ] = array(
@@ -93,10 +96,31 @@ class Calculator {
 				'value'        => $this->format_value( $classic_value * $this->scaled_seed ),
 				'arc_standard' => self::format_degrees( $index * $std_step ),
 				'arc_asian'    => self::format_degrees( $index * $asian_step ),
+				'azimuth'      => $this->azimuth( $index, $divisions ),
 			);
 		}
 
 		return $ordinals;
+	}
+
+	/**
+	 * Standard-angle azimuth for a row, if it lands exactly on a compass division.
+	 *
+	 * Returns the integer angle in degrees when the ordinal sits on a cardinal
+	 * point or a quadrant-third division, otherwise null (no class is added). The
+	 * row's angle is index x (360 / count); it lands on a division of (360 /
+	 * $divisions) degrees exactly when count divides index x $divisions.
+	 *
+	 * @param int $index     1-based ordinal index.
+	 * @param int $divisions Number of equal divisions around the circle.
+	 * @return int|null Angle in degrees, or null when off-division.
+	 */
+	private function azimuth( $index, $divisions ) {
+		if ( 0 !== ( $index * $divisions ) % $this->count ) {
+			return null;
+		}
+
+		return intdiv( $index * CIRCLE_DEGREES_STANDARD, $this->count );
 	}
 
 	/**
