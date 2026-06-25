@@ -17,6 +17,9 @@
 /docs
 /README.md
 
+# README screenshots (referenced by README.md only, not used at runtime)
+/assets/*-example-*.png
+
 # Build output & archives
 /build
 /dist

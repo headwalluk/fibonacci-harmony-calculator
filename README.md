@@ -7,13 +7,15 @@
 A standalone WordPress plugin that adds a shortcode, `[fibonacci_harmony]`, rendering an
 interactive calculator and graphic that explores the **Fibonacci 60 Repeating Pattern**.
 
-Visitors set a **seed** (a decimal from `0.0` to `2.0`) that scales a Fibonacci sequence
+Visitors set a **seed** (a decimal from `0.0` to `2.1`) that scales a Fibonacci sequence
 of N numbers (default 60). The sequence is laid out as a clock face around a circular
 wheel graphic — index 60 at the top, running clockwise — with each entry showing its
 value and its arc angle in both the standard 360° and the "Ancient" 432° systems. The
 numbers recalculate live as the seed changes.
 
 No build step, no Composer, no external CDNs — drop it in and activate.
+
+![The Fibonacci Harmony Calculator rendered on a page: number tables flanking the wheel with North/South call-outs and compass colouring.](assets/fibonacci-harmony-calculator-example-1.png)
 
 ## Usage
 
