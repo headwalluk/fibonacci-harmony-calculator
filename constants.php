@@ -28,6 +28,7 @@ const SHORTCODE_TAG = 'fibonacci_harmony';
 const ATT_SEED  = 'seed';
 const ATT_COUNT = 'count';
 const ATT_IMAGE = 'image';
+const ATT_WHEEL = 'wheel';
 
 // ============================================================================
 // Defaults - prefix with DEF_
@@ -36,22 +37,31 @@ const ATT_IMAGE = 'image';
 const DEF_SEED  = 1.0;
 const DEF_COUNT = 60;
 
+// Default wheel graphic variant. Must be a key of WHEEL_IMAGES.
+const DEF_WHEEL = 'a';
+
 // Ordinal count bounds. The shortcode clamps the `count` attribute to this range
 // so a stray value can't render a runaway DOM (each ordinal is a table row). The
 // canonical case is the 60-point wheel; the maximum is generous but bounded.
 const COUNT_MIN = 1;
 const COUNT_MAX = 360;
 
-// Default wheel graphic, relative to the assets/ directory. The client supplies
-// the real artwork; this is swapped out by the ATT_IMAGE attribute when set.
-const DEF_WHEEL_IMAGE = 'wheel.png';
+// Bundled wheel graphics, keyed by the variant string accepted by the ATT_WHEEL
+// attribute. Files are relative to the assets/ directory. The client supplies the
+// artwork; pick the default with DEF_WHEEL, override per-instance with ATT_WHEEL,
+// or replace the URL entirely with ATT_IMAGE. The legacy 'wheel.png' graphic is
+// deprecated in favour of these variants.
+const WHEEL_IMAGES = array(
+	'a' => 'fibonacci-wheel-a.webp',
+	'b' => 'fibonacci-wheel-b.webp',
+);
 
 // ============================================================================
 // Seed bounds & precision
 // ============================================================================
 
 const SEED_MIN = 0.0;
-const SEED_MAX = 2.0;
+const SEED_MAX = 2.1;
 
 // The range slider drags in coarse hundredths; the number field accepts a fine,
 // fully-precise decimal (down to 1/SEED_SCALE) so a client can type an exact seed.

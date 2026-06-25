@@ -4,7 +4,7 @@ Tags: fibonacci, shortcode, calculator, sacred geometry, golden ratio
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,7 +14,7 @@ An interactive shortcode that explores the Fibonacci 60 repeating pattern on a c
 
 Fibonacci Harmony Calculator adds a single shortcode, `[fibonacci_harmony]`, that renders an interactive calculator and graphic exploring the **Fibonacci 60 Repeating Pattern** (the Pisano-period-60 wheel).
 
-Visitors set a **seed** (a decimal from `0.0` to `2.0`) that scales a Fibonacci-style sequence of N numbers (default 60). The sequence is laid out as a clock face around a circular wheel graphic — index 60 at the top, running clockwise — and every value shows its arc angle in both the standard 360° and the "Ancient" 432° systems. The numbers recalculate live in the browser as the seed changes.
+Visitors set a **seed** (a decimal from `0.0` to `2.1`) that scales a Fibonacci-style sequence of N numbers (default 60). The sequence is laid out as a clock face around a circular wheel graphic — index 60 at the top, running clockwise — and every value shows its arc angle in both the standard 360° and the "Ancient" 432° systems. The numbers recalculate live in the browser as the seed changes.
 
 **Features**
 
@@ -42,11 +42,11 @@ Insert the shortcode `[fibonacci_harmony]` into any post, page, or shortcode-ena
 
 = What attributes does the shortcode accept? =
 
-`seed` (decimal `0.0`–`2.0`, default `1.0`), `count` (number of ordinals, default `60`), and `image` (URL of an alternative wheel graphic). See `docs/shortcode.md` for the full reference.
+`seed` (decimal `0.0`–`2.1`, default `1.0`), `count` (number of ordinals, default `60`), `wheel` (which bundled graphic to show, `a` or `b`, default `a`), and `image` (URL of an alternative wheel graphic, overrides `wheel`). See `docs/shortcode.md` for the full reference.
 
 = Can I use my own wheel graphic? =
 
-Yes — pass `image="https://example.com/your-wheel.png"`, or filter the URL globally with `fhc_wheel_image_url`.
+Two wheel graphics ship with the plugin — choose between them with `wheel="a"` or `wheel="b"`. To supply your own, pass `image="https://example.com/your-wheel.png"`, or filter the URL globally with `fhc_wheel_image_url`.
 
 = Can a theme override the layout? =
 
@@ -62,6 +62,11 @@ No. The CSS and JavaScript are only enqueued on pages that actually contain the 
 2. The seed slider and number field driving a live recalculation.
 
 == Changelog ==
+
+= 1.0.1 =
+* Added the `wheel` shortcode attribute to choose between two bundled wheel graphics (`a` or `b`); an unknown value is logged and falls back to `a`.
+* Raised the maximum seed from `2.0` to `2.1`.
+* Replaced the bundled `wheel.png` with two WebP graphics.
 
 = 1.0.0 =
 * First stable release.

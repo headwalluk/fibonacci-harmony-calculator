@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.1] - 2026-06-25
+
+### Added
+- **`wheel` shortcode attribute** to choose between two bundled wheel graphics — `wheel="a"` or `wheel="b"`. An unrecognised value is reported via `error_log()` and falls back to the default (`a`), so a typo never breaks the output. The `image` attribute (a full URL override) still takes precedence when set.
+
+### Changed
+- Raised the maximum **seed** from `2.0` to `2.1`.
+- Replaced the single bundled `wheel.png` with two WebP graphics (`fibonacci-wheel-a.webp`, `fibonacci-wheel-b.webp`), selected by the new `wheel` attribute. New `DEF_WHEEL` and `WHEEL_IMAGES` constants; the legacy `DEF_WHEEL_IMAGE` is removed.
+
+### Removed
+- The deprecated `assets/wheel.png` placeholder graphic.
+
 ## [1.0.0] - 2026-06-24
 
 First stable release.

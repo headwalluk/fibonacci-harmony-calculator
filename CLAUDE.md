@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Fibonacci Harmony Calculator is a standalone WordPress plugin that registers a shortcode. The shortcode renders an interactive calculator and graphic that explores the "Fibonacci 60 Repeating Pattern" (the Pisano-period-60 wheel).
 
-The user enters a **seed** (a decimal from `0.0` to `2.0`) that drives the calculation of a Fibonacci-style sequence of N numbers (default 60). The sequence is presented as two columns of digit rows flanking a circular **wheel** graphic with N points, the points starting at top/centre and progressing clockwise.
+The user enters a **seed** (a decimal from `0.0` to `2.1`) that drives the calculation of a Fibonacci-style sequence of N numbers (default 60). The sequence is presented as two columns of digit rows flanking a circular **wheel** graphic with N points, the points starting at top/centre and progressing clockwise.
 
 - **Namespace:** `Fibonacci_Harmony_Calculator`
 - **Text Domain:** `fibonacci-harmony-calculator` (matches the plugin slug)
@@ -92,7 +92,7 @@ around the wheel as a clock face (see `dev-notes/01-requirements.md` §4 for the
 
 All magic strings, attribute names, and defaults live in `constants.php` under the
 `Fibonacci_Harmony_Calculator` namespace. **No magic numbers in code** — the sequence
-length (default `60`), the seed range (`0.0`–`2.0`), the full-circle degrees
+length (default `60`), the seed range (`0.0`–`2.1`), the full-circle degrees
 (`360` standard / `432` Ancient), and the shortcode tag are all named constants.
 Convention: `DEF_` for defaults, `ATT_` for shortcode attribute keys.
 

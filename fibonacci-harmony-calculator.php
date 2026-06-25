@@ -3,7 +3,7 @@
  * Plugin Name:       Fibonacci Harmony Calculator
  * Plugin URI:        https://headwall-hosting.com/
  * Description:       Shortcode that renders an interactive calculator and graphic exploring the Fibonacci 60 Repeating Pattern.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Requires at least: 6.0
  * Requires PHP:      8.0
  * Author:            Paul Faulkner
@@ -19,7 +19,7 @@
 defined( 'ABSPATH' ) || die();
 
 const FHC_NAME    = 'fibonacci-harmony-calculator';
-const FHC_VERSION = '1.0.0';
+const FHC_VERSION = '1.0.1';
 
 define( 'FHC_DIR', plugin_dir_path( __FILE__ ) );
 define( 'FHC_URL', plugin_dir_url( __FILE__ ) );

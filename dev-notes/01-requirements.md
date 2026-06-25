@@ -44,7 +44,7 @@ The sequence is **1-indexed** in all display (index 1 … N), never 0-indexed.
 
 ### 2.2 Seed
 
-- Range: `0.0` to `2.0` inclusive.
+- Range: `0.0` to `2.1` inclusive.
 - Step: the **range slider** drags in coarse `0.01` increments; the **number field**
   accepts a fully-precise decimal down to `0.000001` (6 places) so a client can type
   an exact seed such as `1.234567`.
@@ -213,7 +213,7 @@ arrangement is the point of the visualisation.
 
 | Attribute | Default | Notes |
 |-----------|---------|-------|
-| `seed` | `1.0` | Decimal 0.0–2.0; clamped. Sets the initial value; users can change it live. |
+| `seed` | `1.0` | Decimal 0.0–2.1; clamped. Sets the initial value; users can change it live. |
 | `count` | `60` | Number of ordinals (named constant default). Drives rows, columns, and arc steps. |
 | `image` | *(bundled wheel)* | Optional URL/path to an alternative wheel graphic. |
 
@@ -237,7 +237,7 @@ arrangement is the point of the visualisation.
 ### 6.1 Seed control
 
 - A range **slider + number box**, kept in sync.
-- `min = 0.0`, `max = 2.0`, `step = 0.01`, initial = `seed` attribute (default `1.0`).
+- `min = 0.0`, `max = 2.1`, `step = 0.01`, initial = `seed` attribute (default `1.0`).
 
 ---
 

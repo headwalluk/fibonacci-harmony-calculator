@@ -66,6 +66,7 @@ class Shortcode {
 				ATT_SEED  => DEF_SEED,
 				ATT_COUNT => DEF_COUNT,
 				ATT_IMAGE => '',
+				ATT_WHEEL => DEF_WHEEL,
 			)
 		);
 
@@ -76,7 +77,7 @@ class Shortcode {
 
 		$image = '' !== trim( (string) $atts[ ATT_IMAGE ] )
 			? $atts[ ATT_IMAGE ]
-			: FHC_ASSETS_URL . DEF_WHEEL_IMAGE;
+			: $this->resolve_wheel_image( $atts[ ATT_WHEEL ] );
 
 		/**
 		 * Filter the wheel graphic URL before it is escaped and output.
@@ -109,6 +110,35 @@ class Shortcode {
 		 * @param array      $atts       The resolved shortcode attributes.
 		 */
 		return apply_filters( 'fhc_output', $output, $calculator, $atts );
+	}
+
+	/**
+	 * Resolve a wheel variant key ('a'|'b') to its bundled image URL.
+	 *
+	 * Unknown values are reported via error_log() and fall back to the default
+	 * graphic (DEF_WHEEL), so a typo in the shortcode never breaks the output.
+	 *
+	 * @param string $variant Wheel variant from the ATT_WHEEL attribute.
+	 * @return string Absolute URL to the bundled wheel image.
+	 */
+	private function resolve_wheel_image( $variant ) {
+		$variant = strtolower( trim( (string) $variant ) );
+
+		if ( ! isset( WHEEL_IMAGES[ $variant ] ) ) {
+			if ( '' !== $variant ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				error_log(
+					sprintf(
+						'Fibonacci Harmony Calculator: unknown wheel variant "%s"; falling back to "%s".',
+						$variant,
+						DEF_WHEEL
+					)
+				);
+			}
+			$variant = DEF_WHEEL;
+		}
+
+		return FHC_ASSETS_URL . WHEEL_IMAGES[ $variant ];
 	}
 
 	/**

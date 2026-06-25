@@ -19,15 +19,17 @@ then drag the slider or type a seed to recalculate.
 
 | Attribute | Default | Description |
 |-----------|---------|-------------|
-| `seed` | `1.0` | The starting value, a decimal from `0.0` to `2.0`. Sets where the calculator opens; visitors can still change it live. Values outside the range are clamped. The slider steps by `0.01`; the number field accepts a precise decimal (up to 6 places). |
+| `seed` | `1.0` | The starting value, a decimal from `0.0` to `2.1`. Sets where the calculator opens; visitors can still change it live. Values outside the range are clamped. The slider steps by `0.01`; the number field accepts a precise decimal (up to 6 places). |
 | `count` | `60` | How many numbers to generate. Drives the rows, the layout split, and the arc-angle steps. Clamped to `1`–`360`. |
-| `image` | *(bundled wheel)* | URL of an alternative wheel graphic. Use this if you need a wheel drawn for a different `count` (see note below). |
+| `wheel` | `a` | Which bundled wheel graphic to show — `a` or `b`. An unrecognised value falls back to `a` (and is noted in the PHP error log). |
+| `image` | *(bundled wheel)* | URL of an alternative wheel graphic. Overrides `wheel`. Use this if you need a wheel drawn for a different `count` (see note below). |
 
 ### Examples
 
 ```
 [fibonacci_harmony seed="1.0"]
 [fibonacci_harmony seed="0.5" count="60"]
+[fibonacci_harmony wheel="b"]
 [fibonacci_harmony seed="1.618" count="48" image="https://example.com/wheel-48.svg"]
 ```
 
